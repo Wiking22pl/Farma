@@ -12,7 +12,7 @@ public class Maintnance {
         return true;
     }
 
-    public static Double RandomChance(Double chance){      //losować liczbe z odpowiedniego zakresu
+    public static Double RandomMultiplier(Double min, Double max){      //losować liczbe z odpowiedniego zakresu
 
 
         return 1.;

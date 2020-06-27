@@ -9,6 +9,8 @@ public class AnimalSpecies {
 
     public final Double weight;
 
+    public final String name;
+
     //ile miejsca w budynku dane zwierze zajmuje
     public final Double capasity;
 
@@ -30,10 +32,11 @@ public class AnimalSpecies {
     //    szansę na rozmnożenie, jeżeli posiadasz więcej niż jedno
     public final Double breedChance;
 
-    public final Double costOfBoughtFood;
+    public final Double costOfBoughtFood;   //Zrobic obiekt pasza i dać tu do niego referencje
 
-    public AnimalSpecies(Double weight, Double capasity, Double buyCost, Double weightGrowth, Double adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood) {
+    public AnimalSpecies(Double weight, String name, Double capasity, Double buyCost, Double weightGrowth, Double adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood) {
         this.weight = weight;
+        this.name = name;
         this.capasity = capasity;
         this.buyCost = buyCost;
         this.weightGrowth = weightGrowth;

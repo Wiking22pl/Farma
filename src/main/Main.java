@@ -11,6 +11,7 @@ import plants.PlantSpecies;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Main {
 
     public static String TakeInputFromKeyboard() throws IOException {
 
-        String x = "";
+        StringBuilder x = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
@@ -34,7 +35,7 @@ public class Main {
                 if (c == 13 || c == 10 || c == 9 || c == 32) {   //10 i 13 ==> enter  32 ==> spacja   9 ==> tab
                     break;
                 } else {
-                    x += c;
+                    x.append(c);
                 }
             }
 
@@ -42,7 +43,7 @@ public class Main {
             System.out.println("Ej no, nieładnie jest psuć program złymi inputami ty hujtaju >:(");
         }
 
-        return x;
+        return x.toString();
         //       System.out.println(x);
     }
 
@@ -87,11 +88,19 @@ public class Main {
 
         Double money = STARTING_MONEY;
         List<Animal> animals = new ArrayList<>();
-        List<AnimalCount> breeding = new ArrayList<>();    //Przypisać do niej wszystkie gatunki zwierząt w ilości 0
+        List<AnimalCount> breeding = new ArrayList<>(); //Przypisać do niej wszystkie gatunki zwierząt w ilości 0
         List<PlantSpecies> seeds = new ArrayList<>();
         List<Planted> planted = new ArrayList<>();
-        List<Seeds> storage = new ArrayList<>();     //Przypisać do niej wszystkie gatunki rośliń w ilości 0
+        List<Seeds> storage = new ArrayList<>();        //Przypisać do niej wszystkie gatunki rośliń w ilości 0
         List<Farm> farms = new ArrayList<>();
+
+        List<List> mainList= new ArrayList<>();     //Lepij chyba po prostu zrobić coś w maintnanace
+        mainList.add(animals);
+        mainList.add(breeding);
+        mainList.add(seeds);
+        mainList.add(planted);
+        mainList.add(storage);
+        mainList.add(farms);
 
         Double AnimalCapacity;       // => suma ilości budynków na naszych farmach *5 lub 10
 
@@ -104,44 +113,83 @@ public class Main {
 
             for (int week = 1; week <= 52; ) {
 
+                boolean areYouShortOnFunds = false;
+
                 //Nowy tydzień
 
                 //Maintnance:   (chyba lepiej aby był po while)
 
-//                rośliny rosną
+//
+                for (Animal animal : animals) {
+                    animal.age++;
+                    boolean animalAte = false;
+
+//                jeżeli masz kury/krowy/owce dostajesz pieniądze za jajka albo mleko
+                    switch (animal.species.name) {                                       //dodac odpowiednie zwierzęta
+
+                        default:
+
+                            break;
+                    }
+
+
+
+//                zwierzęta wcinają paszę, jeśli masz dla nich odłożone plony to w pierwszej kolejności ze stodoły
+                    for (int z = 0; z < storage.size(); z++) {
+                        Seeds pasza = storage.get(z);
+                        if (pasza.amount > animal.species.foodNeeded && animal.species.whatItCanEat.contains(pasza)) {
+                            pasza.amount -= animal.species.foodNeeded;
+                            animalAte = true;
+                        }                        //a jeżeli nie to musisz je kupić
+                        else if(money > animal.species.costOfBoughtFood) {
+                            //There is nothing more permanent then a temporary solution
+                            money -= animal.species.costOfBoughtFood;
+                            animalAte = true;
+                        }
+                    }
+//                  zwierzęta przybierają na masie
+//                  Jeżeli skończą się pieniądze:  zwierzęta zaczynają chudnąć
+                    if (!animalAte && animal.age <= animal.species.adultTime) {
+                        animal.weight += animal.species.weightGrowth;
+                    } else {
+                        animal.weight -= animal.species.weightGrowth / 4;
+                        areYouShortOnFunds = true;
+                    }
+
+
+                }
+
+                //                rośliny rosną
 //                ponosisz koszty ochrony roślin przed szkodnikami
                 for (Planted value : planted) {
                     value.age++;
-                    money -= value.amount * value.species.costPests;
-                }
+                    Double price = value.amount * value.species.costPests;
 
-//                zwierzęta przybierają na masie
-                for (Animal value : animals) {
-                    value.age++;
-                    if (value.age <= value.species.adultTime) {
-                        value.weight += value.species.weightGrowth;
+//               Jeżeli skończą się pieniądze:
+//                w każdym tygodniu istnieje niewielkie ryzyko, że robaki zjedzą plony na polach
+                    if (price > money) {
+                        areYouShortOnFunds = true;
+                        //robaki
+                    } else {
+                        money -= price;
                     }
-//                jeżeli masz kury/krowy/owce dostajesz pieniądze za jajka albo mleko
-
-//                zwierzęta wcinają paszę, jeśli masz dla nich odłożone plony to w pierwszej kolejności ze stodoły, jeżeli nie to musisz je kupić.
-                    //Pasza i karma mają stałą cene
                 }
 
 //                istnieje pewna, niewielka szansa, że zwierzęta się rozmnożą jeżeli posiada więcej niż jedno
-                for (AnimalCount value : breeding) {
-                    for (int pair = value.adultAmount / 2; pair > 0; pair--) {
-                        if (Maintnance.RandomizeBool(value.species.breedChance)) {
-                            animals.add(new Animal(value.species));
+                if (!areYouShortOnFunds) {
+                    for (AnimalCount animalNumber : breeding) {
+                        for (int pair = animalNumber.adultAmount / 2; pair > 0; pair--) {
+                            if (Maintnance.RandomizeBool(animalNumber.species.breedChance)) {
+                                animals.add(new Animal(animalNumber.species));
 //                            System.out.println();
+                            }
                         }
                     }
                 }
 
-//               Jeżeli skończą się pieniądze:
-//                zwierzęta zaczynają chudnąć
-//                w każdym tygodniu istnieje niewielkie ryzyko, że robaki zjedzą plony na polach
 
-                //Wyświetl informacje o tygodniu
+                //Wyświetl informacje o obecnym tygodniu
+                System.out.println();
 
                 MAIN_LOOP:
                 while (true) {
@@ -154,7 +202,6 @@ public class Main {
                     System.out.println();
 
                     //Wczytaj opcje z klawiatury
-
                     String a = TakeInputFromKeyboard();
 
                     switch (a) {
