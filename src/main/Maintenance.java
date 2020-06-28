@@ -9,19 +9,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Random;
 
-public class Maintnance {
+public class Maintenance {
 
 
     public static Boolean RandomizeBool(Double p) {       //losować czy to się stało
-
-        return true;
+        if (Math.random() < p) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static Double RandomInInterval(Double min, Double max) {      //losować liczbe z odpowiedniego zakresu
-
-
-        return 1.;
+        Random rand = new Random();
+        Double wynik = ((double) rand.nextInt((int) (max - min))) + min;
+        return wynik;
     }
 
     public static Boolean DidYouWin(Farm farm, List<Animal> animals, List<Planted> planted, List<Seeds> storage) {
@@ -49,17 +53,20 @@ public class Maintnance {
             System.out.println(s.species.name + ", " + s.amount + ", " + s.species.salePrice + ", " + s.species.plantingEnd + "-" + s.species.plantingEnd + ", " + s.species.costPests);
         }
     }
-    
-    public static void BuyLand(Farm farm){
-        
+
+    public static void BuyLand(Farm farm) {
+
     }
 
     public static void BuyBuilding(Farm farm) {
+
     }
 
     public static void BuyAnimal(List<Animal> animals) {
+
     }
 
     public static void BuySeeds(List<Seeds> storage) {
+
     }
 }

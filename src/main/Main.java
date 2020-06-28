@@ -11,7 +11,6 @@ import plants.PlantSpecies;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,25 @@ public class Main {
     public static final Double SHEEP_MILK_MIN = 2.;
     public static final Double SHEEP_MILK_MAX = 6.;
 
+    //Gatunki roślin
+    public static List<PlantSpecies> plantsSpecies = new ArrayList<>(); //dodawać od najtańszej do najdroższej
+    public static PlantSpecies pszenica = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies ds = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies sagda = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies srfaws = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies egsnggf = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+
+            //add do listy trzeba zrobic w osobnej metodzie
     //Gatunki zwierząt
+    public static List<AnimalSpecies> animalSpiecies = new ArrayList<>();
+    public static AnimalSpecies kura = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies fbsdergfg = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies hgswasfdf = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies sgdfs = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies hgfdsdfg = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+
+
+    //Farma?
 
 
     public static String TakeInputFromKeyboard() throws IOException {
@@ -66,9 +83,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        while (true) {
 
-//            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
 
             //Informacje o grze
             System.out.println("Farma");
@@ -79,7 +95,6 @@ public class Main {
 
             //Wczytaj informacje z klawiatury
             String menu = TakeInputFromKeyboard();
-
 
             //Proste menu obsługiwane z klawiatury
             switch (menu) {
@@ -135,7 +150,7 @@ public class Main {
                 //Nowy tydzień
 
                 //Sprawdź czy wygraliśmy
-                if(Maintnance.DidYouWin(farm,animals,planted,storage)){
+                if(Maintenance.DidYouWin(farm,animals,planted,storage)){
 //                    Statystyki
                     Win();
                 }
@@ -151,11 +166,11 @@ public class Main {
 
                     //Lista zwierząt i roślin
                     //Zwierzęta
-                    Maintnance.InfoAnimal(animals);
+                    Maintenance.InfoAnimal(animals);
                     //Plony
-                    Maintnance.InfoPlant(planted);
+                    Maintenance.InfoPlant(planted);
                     //Zapasy
-                    Maintnance.InfoStorage(storage);
+                    Maintenance.InfoStorage(storage);
 
 
                     if (areYouShortOnFunds){
@@ -178,22 +193,22 @@ public class Main {
 
 //                        zakup/sprzedaż ziemi uprawnej
                         case "kup ziemie":
-                            Maintnance.BuyLand(farm);
+                            Maintenance.BuyLand(farm);
                             break;
 
 //                        zakup nowych budynków
                         case "kup budynek":
-                            Maintnance.BuyBuilding(farm);
+                            Maintenance.BuyBuilding(farm);
                             break;
 
 //                        zakup zwierząt
                         case "kup zwierze":
-                            Maintnance.BuyAnimal(animals);
+                            Maintenance.BuyAnimal(animals);
                             break;
 
 //                      lub roślin
-                        case "kup nasiona":
-                            Maintnance.BuySeeds(storage);
+                        case "kup rośliny":
+                            Maintenance.BuySeeds(storage);
                             break;
 
 
@@ -209,7 +224,7 @@ public class Main {
 //                        wyjście z gry
                         case "ragequit":
 //                            Maintnance.Statystyki();  //Ew. pominąć
-//                            System.out.println("");
+                            System.out.println("The truth is, the game was rigged from the start");
                             System.exit(0);
                             break;
 
@@ -241,15 +256,15 @@ public class Main {
                     switch (animal.species.name) {                                       //dodac odpowiednie zwierzęta
 
                         case "Kura":
-                        dairy += EGG_VALUE * Maintnance.RandomInInterval(EGG_MIN,EGG_MAX);
+                        dairy += EGG_VALUE * Maintenance.RandomInInterval(EGG_MIN,EGG_MAX);
                             break;
 
                         case "Krowa":
-                            dairy += COW_MILK_VALUE * Maintnance.RandomInInterval(COW_MILK_MIN,COW_MILK_MAX);
+                            dairy += COW_MILK_VALUE * Maintenance.RandomInInterval(COW_MILK_MIN,COW_MILK_MAX);
                             break;
 
                         case "Owca":
-                            dairy += SHEEP_MILK_VALUE * Maintnance.RandomInInterval(SHEEP_MILK_MIN,SHEEP_MILK_MAX);
+                            dairy += SHEEP_MILK_VALUE * Maintenance.RandomInInterval(SHEEP_MILK_MIN,SHEEP_MILK_MAX);
                             break;
 
                         default:
@@ -300,19 +315,27 @@ public class Main {
 //                w każdym tygodniu istnieje niewielkie ryzyko, że robaki zjedzą plony na polach
                     if (price > money) {
                         areYouShortOnFunds = true;
+                        //if(Maintnance.RandomizeBool(0.1))
                         //robaki
                     } else {
                         money -= price;
                     }
                 }
 
+
+                //susze?
+//                if(Maintnance.RandomizeBool(0.05)){
+//
+//                }
+
 //                istnieje pewna, niewielka szansa, że zwierzęta się rozmnożą jeżeli posiada więcej niż jedno
                 if (!areYouShortOnFunds) {
                     for (AnimalCount animalNumber : breeding) {
                         for (int pair = animalNumber.adultAmount / 2; pair > 0; pair--) {
-                            if (Maintnance.RandomizeBool(animalNumber.species.breedChance)) {
+                            if (Maintenance.RandomizeBool(animalNumber.species.breedChance)) {
                                 animals.add(new Animal(animalNumber.species));
-//                            System.out.println();
+//                                breeding.add
+                                System.out.println(animalNumber.species.name+" się rozmnożyły!");
                             }
                         }
                     }

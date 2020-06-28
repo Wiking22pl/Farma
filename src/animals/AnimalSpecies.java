@@ -30,14 +30,14 @@ public class AnimalSpecies {
     public final Double foodNeeded;
 
     //    rodzaje jedzenia jakie to zwierze akceptuje, pożywienie dla niektórych zwierząt możesz wyhodować samodzielnie.
-    public final List<Seeds> whatItCanEat = new ArrayList<>();
+    public final List<Seeds> whatItCanEat;
 
     //    szansę na rozmnożenie, jeżeli posiadasz więcej niż jedno
     public final Double breedChance;
 
     public final Double costOfBoughtFood;   //Zrobic obiekt pasza i dać tu do niego referencje
 
-    public AnimalSpecies(Double weight, String name, Double capasity, Double buyCost, Double weightGrowth, Integer adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood) {
+    public AnimalSpecies(Double weight, String name, Double capasity, Double buyCost, Double weightGrowth, Integer adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood,List<Seeds> whatItCanEat) {
         this.weight = weight;
         this.name = name;
         this.capasity = capasity;
@@ -47,5 +47,6 @@ public class AnimalSpecies {
         this.foodNeeded = foodNeeded;
         this.breedChance = breedChance;
         this.costOfBoughtFood = costOfBoughtFood;
+        this.whatItCanEat = whatItCanEat;
     }
 }
