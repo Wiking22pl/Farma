@@ -18,10 +18,25 @@ import java.util.List;
 public class Main {
 
     public static final Double STARTING_MONEY = 20000.;
+
+    //Warunki zwycięstwa
     public static final Double WIN_HECTARS = 20.;
     public static final Integer WIN_ANIMALS_SPECIES = 5;
     public static final Integer WIN_PLANTS_SPECIES = 5;
     public static final Double WIN_WEEKS_OF_FOOD = 52.;
+
+    //Wartość i ilość produktów zwierzęcych
+    public static final Double EGG_VALUE = 2.;
+    public static final Double EGG_MIN = 5.;
+    public static final Double EGG_MAX = 10.;
+    public static final Double COW_MILK_VALUE = 5.;
+    public static final Double COW_MILK_MIN = 5.;
+    public static final Double COW_MILK_MAX = 12.;
+    public static final Double SHEEP_MILK_VALUE = 3.;
+    public static final Double SHEEP_MILK_MIN = 2.;
+    public static final Double SHEEP_MILK_MAX = 6.;
+
+    //Gatunki zwierząt
 
 
     public static String TakeInputFromKeyboard() throws IOException {
@@ -32,7 +47,7 @@ public class Main {
         try {
             while (true) {
                 char c = (char) br.read();
-                if (c == 13 || c == 10 || c == 9 || c == 32) {   //10 i 13 ==> enter  32 ==> spacja   9 ==> tab
+                if (c == 13 || c == 10 || c == 9 ) {   //10 i 13 ==> enter     9 ==> tab
                     break;
                 } else {
                     x.append(c);
@@ -87,20 +102,22 @@ public class Main {
     public static void Game() throws IOException {
 
         Double money = STARTING_MONEY;
+        Double dairy = 0.;
+        boolean areYouShortOnFunds = false;
         List<Animal> animals = new ArrayList<>();
         List<AnimalCount> breeding = new ArrayList<>(); //Przypisać do niej wszystkie gatunki zwierząt w ilości 0
         List<PlantSpecies> seeds = new ArrayList<>();
         List<Planted> planted = new ArrayList<>();
         List<Seeds> storage = new ArrayList<>();        //Przypisać do niej wszystkie gatunki rośliń w ilości 0
-        List<Farm> farms = new ArrayList<>();
+        Farm farm = new Farm();
 
-        List<List> mainList= new ArrayList<>();     //Lepij chyba po prostu zrobić coś w maintnanace
-        mainList.add(animals);
-        mainList.add(breeding);
-        mainList.add(seeds);
-        mainList.add(planted);
-        mainList.add(storage);
-        mainList.add(farms);
+//        List<List> mainList = new ArrayList<>();     //Lepij chyba po prostu zrobić coś w maintnanace
+//        mainList.add(animals);
+//        mainList.add(breeding);
+//        mainList.add(seeds);
+//        mainList.add(planted);
+//        mainList.add(storage);
+//        mainList.add(farm);
 
         Double AnimalCapacity;       // => suma ilości budynków na naszych farmach *5 lub 10
 
@@ -108,18 +125,114 @@ public class Main {
 
         for (int year = 1; year <= 20; year++) {
 
-            //Wyświetl informacje o nowym
+
+            //Wyświetl informacje o nowym roku
             //Statystyki?
 
-            for (int week = 1; week <= 52; ) {
+            for (int week = 1; week <= 52; week++) {
 
-                boolean areYouShortOnFunds = false;
 
                 //Nowy tydzień
 
-                //Maintnance:   (chyba lepiej aby był po while)
+                //Sprawdź czy wygraliśmy
+                if(Maintnance.DidYouWin(farm,animals,planted,storage)){
+//                    Statystyki
+                    Win();
+                }
 
+                System.out.println();
+
+                MAIN_LOOP:
+                while (true) {
+
+
+                    //Wyświetl informacje o naszym statusie
+                    System.out.println("Rok: "+year+" Tydzień: "+week+" Pieniądze: "+money);
+
+                    //Lista zwierząt i roślin
+                    //Zwierzęta
+                    Maintnance.InfoAnimal(animals);
+                    //Plony
+                    Maintnance.InfoPlant(planted);
+                    //Zapasy
+                    Maintnance.InfoStorage(storage);
+
+
+                    if (areYouShortOnFunds){
+                        System.out.println("Deficyt finansowy");
+                    }
+
+                    //Wyświetl dostępne opcje
+                    System.out.print("\nLista komend: ");
+
+                    //Wczytaj opcje z klawiatury
+                    String a = TakeInputFromKeyboard();
+
+                    switch (a) {
+
+
+//                        zakup farmy
+//                        case "kup farme":
 //
+//                            break;
+
+//                        zakup/sprzedaż ziemi uprawnej
+                        case "kup ziemie":
+                            Maintnance.BuyLand(farm);
+                            break;
+
+//                        zakup nowych budynków
+                        case "kup budynek":
+                            Maintnance.BuyBuilding(farm);
+                            break;
+
+//                        zakup zwierząt
+                        case "kup zwierze":
+                            Maintnance.BuyAnimal(animals);
+                            break;
+
+//                      lub roślin
+                        case "kup nasiona":
+                            Maintnance.BuySeeds(storage);
+                            break;
+
+
+//                        posadzenie roślin (jeżeli posiadasz sadzonki, które można posadzić w tym okresie)
+//                        zbiory roślin (jeżeli masz gotowe do zebrania plony)
+//                        sprzedaż roślin lub zwierząt
+
+
+//                        następny tydzień
+                        case "end":
+                            break MAIN_LOOP;
+
+//                        wyjście z gry
+                        case "ragequit":
+//                            Maintnance.Statystyki();  //Ew. pominąć
+//                            System.out.println("");
+                            System.exit(0);
+                            break;
+
+
+//                        nieprawidlowa komenda
+                        default:
+                            System.out.println("Nieprawidłowa komenda");
+                            System.out.println();
+                            break;
+
+//                        sprawdzenie stanu zapasów                     //gra pokazuje je automatycznie
+//                        przejrzenie informacji o posiadanych zwierzętach
+//                        przejrzenie informacji o posiadanych sadzonkach i zasadzonych roślinach
+
+                    }
+                }
+
+                //
+                //              MAINTENANCE:
+                //
+
+                System.out.println();
+                areYouShortOnFunds = false;
                 for (Animal animal : animals) {
                     animal.age++;
                     boolean animalAte = false;
@@ -127,11 +240,24 @@ public class Main {
 //                jeżeli masz kury/krowy/owce dostajesz pieniądze za jajka albo mleko
                     switch (animal.species.name) {                                       //dodac odpowiednie zwierzęta
 
-                        default:
+                        case "Kura":
+                        dairy += EGG_VALUE * Maintnance.RandomInInterval(EGG_MIN,EGG_MAX);
+                            break;
 
+                        case "Krowa":
+                            dairy += COW_MILK_VALUE * Maintnance.RandomInInterval(COW_MILK_MIN,COW_MILK_MAX);
+                            break;
+
+                        case "Owca":
+                            dairy += SHEEP_MILK_VALUE * Maintnance.RandomInInterval(SHEEP_MILK_MIN,SHEEP_MILK_MAX);
+                            break;
+
+                        default:
                             break;
                     }
-
+                    System.out.println("Zarobiono "+ dairy+" na mleku i jajkach");
+                    money +=dairy;
+                    dairy=0.;
 
 
 //                zwierzęta wcinają paszę, jeśli masz dla nich odłożone plony to w pierwszej kolejności ze stodoły
@@ -140,10 +266,9 @@ public class Main {
                         if (pasza.amount > animal.species.foodNeeded && animal.species.whatItCanEat.contains(pasza)) {
                             pasza.amount -= animal.species.foodNeeded;
                             animalAte = true;
-                        }                        //a jeżeli nie to musisz je kupić
-                        else if(money > animal.species.costOfBoughtFood) {
-                            //There is nothing more permanent then a temporary solution
-                            money -= animal.species.costOfBoughtFood;
+                        }                        //a jeżeli nie to musisz kupić pasze/karme
+                        else if (money > animal.species.costOfBoughtFood) {
+                            money -= animal.species.costOfBoughtFood; //There is nothing more permanent then a temporary solution
                             animalAte = true;
                         }
                     }
@@ -151,9 +276,11 @@ public class Main {
 //                  Jeżeli skończą się pieniądze:  zwierzęta zaczynają chudnąć
                     if (!animalAte && animal.age <= animal.species.adultTime) {
                         animal.weight += animal.species.weightGrowth;
+                        animal.sellPrice += animal.species.buyCost/animal.species.adultTime;    //Po osiągnięciu dorosłości zwierze jest warte 1.5 wartości kupna
                     } else {
                         animal.weight -= animal.species.weightGrowth / 4;
                         areYouShortOnFunds = true;
+                        System.out.print("Zwierze ci głoduje. ");
                     }
 
 
@@ -164,6 +291,10 @@ public class Main {
                 for (Planted value : planted) {
                     value.age++;
                     Double price = value.amount * value.species.costPests;
+
+                    if (value.age==value.species.growTime){
+                        value.readyToHarvest=true;
+                    }
 
 //               Jeżeli skończą się pieniądze:
 //                w każdym tygodniu istnieje niewielkie ryzyko, że robaki zjedzą plony na polach
@@ -188,48 +319,13 @@ public class Main {
                 }
 
 
-                //Wyświetl informacje o obecnym tygodniu
-                System.out.println();
-
-                MAIN_LOOP:
-                while (true) {
-
-
-                    //Wyświetl informacje o naszym statusie
-                    //Lista zwierząt i roślin
-
-                    //Wyświetl dostępne opcje
-                    System.out.println();
-
-                    //Wczytaj opcje z klawiatury
-                    String a = TakeInputFromKeyboard();
-
-                    switch (a) {
-
-
-//                        zakup farmy
-//                        zakup/sprzedaż ziemi uprawnej
-//                        zakup nowych budynków
-//                        zakup zwierząt lub roślin
-//                        posadzenie roślin (jeżeli posiadasz sadzonki, które można posadzić w tym okresie)
-//                        zbiory roślin (jeżeli masz gotowe do zebrania plony)
-//                        sprzedaż roślin lub zwierząt
-//                        sprawdzenie stanu zapasów
-//                        przejrzenie informacji o posiadanych zwierzętach
-//                        przejrzenie informacji o posiadanych sadzonkach i zasadzonych roślinach
-
-
-                    }
-
-                }
-
             }
         }
     }
 
     public static void Win() {
 
-
+        System.out.println("Gratulacje, wygrałeś!");
         System.exit(0);
     }
 

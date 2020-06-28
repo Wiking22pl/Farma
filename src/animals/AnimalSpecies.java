@@ -17,11 +17,14 @@ public class AnimalSpecies {
     //    koszt zakupu
     public final Double buyCost;
 
+    //Ile kosztuje teraz
+
+
     //    tempo przybierania na wadze na tydzień
     public final Double weightGrowth;
 
     //    czas wzrostu do dojrzałości w tygodniach (po tym okresie przestaje rosnąć, ale może się rozmnażać)
-    public final Double adultTime;
+    public final Integer adultTime;
 
     //    ilość jedzenia jaką musisz dostarczyć na tydzień
     public final Double foodNeeded;
@@ -34,7 +37,7 @@ public class AnimalSpecies {
 
     public final Double costOfBoughtFood;   //Zrobic obiekt pasza i dać tu do niego referencje
 
-    public AnimalSpecies(Double weight, String name, Double capasity, Double buyCost, Double weightGrowth, Double adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood) {
+    public AnimalSpecies(Double weight, String name, Double capasity, Double buyCost, Double weightGrowth, Integer adultTime, Double foodNeeded, Double breedChance, Double costOfBoughtFood) {
         this.weight = weight;
         this.name = name;
         this.capasity = capasity;

@@ -4,6 +4,8 @@ public class PlantSpecies {
 
     public final String species;
 
+    public final String name;
+
     public final Double seedCost;
 
     //    koszt przygotowania ziemi i sadzenia (w przeliczeniu na hektar)
@@ -28,8 +30,9 @@ public class PlantSpecies {
     //    cenę skupu kilograma
     public  Double salePrice;
 
-    public PlantSpecies(String species, Double seedCost, Double costPlanting, Double costPests, Double yield, Integer growTime, Integer plantingStart, Integer plantingEnd, Double costHarvest, Double salePrice) {
+    public PlantSpecies(String species, String name, Double seedCost, Double costPlanting, Double costPests, Double yield, Integer growTime, Integer plantingStart, Integer plantingEnd, Double costHarvest, Double salePrice) {
         this.species = species;
+        this.name = name;
         this.seedCost = seedCost;
         this.costPlanting = costPlanting;
         this.costPests = costPests;

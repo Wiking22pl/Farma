@@ -4,8 +4,14 @@ public class Farm {
 
 
 //     rozmiar
+    public Double size;
 
 //    liczbę budynków.
+    public Integer buildingAmount;
+
+    public Double hectarCost;
+
+    public Double buildingCost;
 
 
 //    Na początku każdej rozgrywki powinien być dostępny nowy zestaw farm do kupienia.
