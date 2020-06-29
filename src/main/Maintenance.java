@@ -13,6 +13,10 @@ import java.util.Random;
 
 public class Maintenance {
 
+//    public static void addToList(List<Object> list, Object o ){
+//        list.add(o);
+//    }
+
 
     public static Boolean RandomizeBool(Double p) {       //losować czy to się stało
         if (Math.random() < p) {
@@ -29,6 +33,16 @@ public class Maintenance {
     }
 
     public static Boolean DidYouWin(Farm farm, List<Animal> animals, List<Planted> planted, List<Seeds> storage) {
+        Boolean rosliny=false;
+        Boolean zwierzeta=false;
+        Boolean zapasy=false;
+
+
+
+
+        if(farm.size>20. ){
+            return true;
+        }
 
         return false;
     }
@@ -50,7 +64,7 @@ public class Maintenance {
     public static void InfoStorage(List<Seeds> list) {
         System.out.println("W magazynie: Gatunek, Ilość,  Wartosc_kilograma,Kiedy można sadzić Koszt_ochrony");
         for (Seeds s : list) {
-            System.out.println(s.species.name + ", " + s.amount + ", " + s.species.salePrice + ", " + s.species.plantingEnd + "-" + s.species.plantingEnd + ", " + s.species.costPests);
+            System.out.println(s.species.name + ", " + s.amount + ", " + s.species.seedCost + ", " + s.species.plantingEnd + "-" + s.species.plantingEnd + ", " + s.species.costPests);
         }
     }
 

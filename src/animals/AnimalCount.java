@@ -6,4 +6,9 @@ public class AnimalCount {
     public Integer amount = 0;
     public Integer adultAmount = 0;
 
+    public AnimalCount(AnimalSpecies species, Integer amount, Integer adultAmount) {
+        this.species = species;
+        this.amount = amount;
+        this.adultAmount = adultAmount;
+    }
 }

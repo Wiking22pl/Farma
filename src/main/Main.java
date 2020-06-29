@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
@@ -38,19 +39,19 @@ public class Main {
     //Gatunki roślin
     public static List<PlantSpecies> plantsSpecies = new ArrayList<>(); //dodawać od najtańszej do najdroższej
     public static PlantSpecies pszenica = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
-    public static PlantSpecies ds = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
-    public static PlantSpecies sagda = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
-    public static PlantSpecies srfaws = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
-    public static PlantSpecies egsnggf = new PlantSpecies("Pszenica",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies pszenica2 = new PlantSpecies("Pszenica2",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies pszenica3 = new PlantSpecies("Pszenica3",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies pszenica4 = new PlantSpecies("Pszenica4",1000.,500.,100.,1000.,20,20,45,1000.);
+    public static PlantSpecies pszenica5 = new PlantSpecies("Pszenica5",1000.,500.,100.,1000.,20,20,45,1000.);
 
-            //add do listy trzeba zrobic w osobnej metodzie
+
     //Gatunki zwierząt
     public static List<AnimalSpecies> animalSpiecies = new ArrayList<>();
     public static AnimalSpecies kura = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
-    public static AnimalSpecies fbsdergfg = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
-    public static AnimalSpecies hgswasfdf = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
-    public static AnimalSpecies sgdfs = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
-    public static AnimalSpecies hgfdsdfg = new AnimalSpecies(0.5,"Kura",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies krowa = new AnimalSpecies(0.5,"Krowa",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies owca = new AnimalSpecies(0.5,"Owca",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies krowa2 = new AnimalSpecies(0.5,"Krowa2",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
+    public static AnimalSpecies krowa3 = new AnimalSpecies(0.5,"Krowa3",0.2,500.,0.1,5,0.1,0.5,0.1*20, new ArrayList<>());
 
 
     //Farma?
@@ -81,6 +82,13 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+
+        plantsSpecies.add(pszenica);
+
+        animalSpiecies.add(kura);
+        animalSpiecies.add(krowa);
+        animalSpiecies.add(owca);
+
 
 
 
@@ -120,18 +128,28 @@ public class Main {
         Double dairy = 0.;
         boolean areYouShortOnFunds = false;
         List<Animal> animals = new ArrayList<>();
-        List<AnimalCount> breeding = new ArrayList<>(); //Przypisać do niej wszystkie gatunki zwierząt w ilości 0
+        List<AnimalCount> breeding = new ArrayList<>();
         List<PlantSpecies> seeds = new ArrayList<>();
         List<Planted> planted = new ArrayList<>();
-        List<Seeds> storage = new ArrayList<>();        //Przypisać do niej wszystkie gatunki rośliń w ilości 0
+        List<Seeds> storage = new ArrayList<>();
         Farm farm = new Farm();
 
-//        List<List> mainList = new ArrayList<>();     //Lepij chyba po prostu zrobić coś w maintnanace
-//        mainList.add(animals);
-//        mainList.add(breeding);
-//        mainList.add(seeds);
-//        mainList.add(planted);
-//        mainList.add(storage);
+        for(AnimalSpecies a: animalSpiecies){
+            breeding.add(new AnimalCount(a,0,0));
+        }
+
+        for(PlantSpecies p: plantsSpecies){
+            storage.add(new Seeds(p,0.));
+        }
+        Comparator<Seeds> Lambda = (s1, s2) -> s1.species.seedCost.compareTo(s2.species.seedCost);
+        storage.sort(Lambda);
+
+        List<List> mainList = new ArrayList<>();     //Lepij chyba po prostu zrobić coś w maintnanace
+        mainList.add(animals);
+        mainList.add(breeding);
+        mainList.add(seeds);
+        mainList.add(planted);
+        mainList.add(storage);
 //        mainList.add(farm);
 
         Double AnimalCapacity;       // => suma ilości budynków na naszych farmach *5 lub 10
