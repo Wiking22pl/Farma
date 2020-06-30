@@ -1,6 +1,7 @@
 package main;
 
 import animals.Animal;
+import animals.AnimalCount;
 import animals.AnimalSpecies;
 import farms.Farm;
 import plants.PlantSpecies;
@@ -122,7 +123,7 @@ public class Maintenance {
 
     }
 
-    public static Double BuyAnimal(List<Animal> animals, Double money, Farm farm) throws IOException {
+    public static Double BuyAnimal(List<Animal> animals, List<AnimalCount> breeding, Double money, Farm farm) throws IOException {
 
         int id;
         int amount;
@@ -151,6 +152,12 @@ public class Maintenance {
                 if (farmCapasity > 0) {
                     for (int i = 0; i < amount; i++) {
                         animals.add(new Animal(specie));
+                        for(AnimalCount b :breeding){
+                            if (b.species == specie){
+                                b.adultAmount++;
+                                break;
+                            }
+                        }
                     }
                     return amount * specie.buyCost;
                 } else {

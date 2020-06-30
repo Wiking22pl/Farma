@@ -80,19 +80,53 @@ public class Main {
         //       System.out.println(x);
     }
 
-    public static Boolean DidYouWin(Farm farm, List<AnimalCount> animals, List<Planted> planted, List<Seeds> storage) {
+    public static Boolean DidYouWin(Farm farm, List<Animal> animalList, List<AnimalCount> animals, List<Planted> planted, List<Seeds> storage) {
 
-        Boolean rosliny = false;
+        List<AnimalSpecies> uniqueAnimals = new ArrayList<>();
+        List<PlantSpecies> uniquePlants = new ArrayList<>();
+        List<Seeds> CopyOfStorage = new ArrayList<>(storage);
 
-        Boolean zwierzeta = false;
+        for (AnimalCount a : animals) {
+            if (a.amount > 0 && !uniqueAnimals.contains(a.species)) {
+                uniqueAnimals.add(a.species);
+            }
+        }
+        if (uniqueAnimals.size() >= WIN_ANIMALS_SPECIES) {
 
-        Boolean zapasy = false;
+            for (Planted p : planted) {
+                if (p.integrity > 0. && p.amount > 0 && !uniquePlants.contains(p.species)) {
+                    uniquePlants.add(p.species);
+                }
+            }
+
+            if (uniquePlants.size() >= WIN_PLANTS_SPECIES) {
+
+                boolean papu = true;
+
+                for (Animal animal : animalList) {
+                    boolean hasEnough = false;
+                    for (int z = 0; z < CopyOfStorage.size() && hasEnough == false; z++) {
+                        if (CopyOfStorage.get(z).amount > animal.species.foodNeeded*WIN_WEEKS_OF_FOOD && animal.species.whatItCanEat.contains(CopyOfStorage.get(z).species)) {
+                            CopyOfStorage.get(z).amount -= animal.species.foodNeeded*WIN_WEEKS_OF_FOOD;
+                            hasEnough = true;
+                        }
+                    }
+                    if (hasEnough == false) {
+                        papu = false;
+                    }
+                }
+
+                if (papu) {
+                    if (farm.size > WIN_HECTARS) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
 
 
-        if (farm.size > 20.) {
-            return true;
-        } else
-            return false;
     }
 
 
@@ -165,8 +199,6 @@ public class Main {
         mainList.add(storage);
 //        mainList.add(farm);
 
-        Double AnimalCapacity;       // => suma ilości budynków na naszych farmach *5 lub 10
-
 //        System.out.println("Debug Gra");
 
         for (int year = 1; year <= 20; year++) {
@@ -181,7 +213,7 @@ public class Main {
                 //Nowy tydzień
 
                 //Sprawdź czy wygraliśmy
-                if (DidYouWin(farm, breeding, planted, storage)) {
+                if (DidYouWin(farm, animals, breeding, planted, storage)) {
 //                    Statystyki
                     Win();
                 }
@@ -224,22 +256,22 @@ public class Main {
 
 //                        zakup/sprzedaż ziemi uprawnej
                         case "kup ziemie":
-                            money -= Maintenance.BuyLand(farm,money);
+                            money -= Maintenance.BuyLand(farm, money);
                             break;
 
 //                        zakup nowych budynków
                         case "kup budynek":
-                            money -= Maintenance.BuyBuilding(farm,money);
+                            money -= Maintenance.BuyBuilding(farm, money);
                             break;
 
 //                        zakup zwierząt
                         case "kup zwierze":
-                            money -= Maintenance.BuyAnimal(animals,money,farm);
+                            money -= Maintenance.BuyAnimal(animals,breeding, money, farm);
                             break;
 
 //                      lub roślin
                         case "kup rośliny":
-                            money -= Maintenance.BuySeeds(storage,money);
+                            money -= Maintenance.BuySeeds(storage, money);
                             break;
 
 
@@ -282,6 +314,14 @@ public class Main {
                 for (Animal animal : animals) {
                     animal.age++;
                     //Jeżeli jest dorosłe to dodaj do listy breeding
+                    if(animal.age.equals(animal.species.adultTime)){
+                        for(AnimalCount b :breeding){
+                            if (b.species == animal.species){
+                                b.adultAmount++;
+                                break;
+                            }
+                        }
+                    }
                     boolean animalAte = false;
 
 //                jeżeli masz kury/krowy/owce dostajesz pieniądze za jajka albo mleko
@@ -308,16 +348,15 @@ public class Main {
 
 
 //                zwierzęta wcinają paszę, jeśli masz dla nich odłożone plony to w pierwszej kolejności ze stodoły
-                    for (int z = 0; z < storage.size(); z++) {
-                        Seeds pasza = storage.get(z);
-                        if (pasza.amount > animal.species.foodNeeded && animal.species.whatItCanEat.contains(pasza)) {
-                            pasza.amount -= animal.species.foodNeeded;
-                            animalAte = true;
-                        }                        //a jeżeli nie to musisz kupić pasze/karme
-                        else if (money > animal.species.costOfBoughtFood) {
-                            money -= animal.species.costOfBoughtFood; //There is nothing more permanent then a temporary solution
+                    for (int z = 0; z < storage.size() && animalAte == false; z++) {
+                        if (storage.get(z).amount > animal.species.foodNeeded && animal.species.whatItCanEat.contains(storage.get(z).species)) {
+                            storage.get(z).amount -= animal.species.foodNeeded;
                             animalAte = true;
                         }
+                    }                        //a jeżeli nie to musisz kupić pasze/karme
+                    if (animalAte == false && money > animal.species.costOfBoughtFood) {
+                        money -= animal.species.costOfBoughtFood; //There is nothing more permanent then a temporary solution
+                        animalAte = true;
                     }
 //                  zwierzęta przybierają na masie
 //                  Jeżeli skończą się pieniądze:  zwierzęta zaczynają chudnąć
@@ -326,7 +365,7 @@ public class Main {
                         animal.sellPrice += animal.species.buyCost / animal.species.adultTime;    //Po osiągnięciu dorosłości zwierze jest warte 1.5 wartości kupna
                     } else {
                         animal.weight -= animal.species.weightGrowth / 4;
-                        animal.sellPrice -= animal.species.buyCost /(4* animal.species.adultTime);
+                        animal.sellPrice -= animal.species.buyCost / (4 * animal.species.adultTime);
                         areYouShortOnFunds = true;
                         System.out.print("Zwierze ci głoduje. ");
                     }
@@ -348,10 +387,10 @@ public class Main {
 //                w każdym tygodniu istnieje niewielkie ryzyko, że robaki zjedzą plony na polach
                     if (price > money) {
                         areYouShortOnFunds = true;
-                        if(Maintenance.RandomizeBool(0.1)){
-                            value.integrity -= Maintenance.RandomInInterval(20.,40.);
-                            if(value.integrity<0.){
-                                value.integrity=0.;
+                        if (Maintenance.RandomizeBool(0.1)) {
+                            value.integrity -= Maintenance.RandomInInterval(20., 40.);
+                            if (value.integrity < 0.) {
+                                value.integrity = 0.;
                             }
                         }
                     } else {
