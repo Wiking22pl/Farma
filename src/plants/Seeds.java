@@ -9,4 +9,12 @@ public class Seeds {
         this.species = species;
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "Seeds{" +
+                "species=" + species.name +
+                ", amount=" + amount +
+                '}';
+    }
 }

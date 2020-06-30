@@ -19,6 +19,17 @@ public class Farm {
         this.hectarCost = hectarCost;
         this.buildingCost = buildingCost;
     }
-//    Na początku każdej rozgrywki powinien być dostępny nowy zestaw farm do kupienia.
+
+    @Override
+    public String toString() {
+        return "Farm{" +
+                "size=" + size +
+                ", buildingAmount=" + buildingAmount +
+                ", hectarCost=" + hectarCost +
+                ", buildingCost=" + buildingCost +
+                '}';
+    }
+
+    //    Na początku każdej rozgrywki powinien być dostępny nowy zestaw farm do kupienia.
 //    Możesz w tym celu przygotować generator farm lub losować dostępne farmy z przygotowanej wcześniej, większej bazy.
 }

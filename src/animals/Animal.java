@@ -7,7 +7,7 @@ public class Animal {
     public Integer id;
     public AnimalSpecies species;
     public Integer age = 1;
-    public Double weight = species.weight;
+    public Double weight;
     public Double sellPrice;
     //public String name;
 
@@ -17,9 +17,20 @@ public class Animal {
         this.id = id_counter++;
         this.species = species;
         this.sellPrice = species.buyCost/2.;
+        this.weight = species.weight;
     }
 
-    //Grow
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "id=" + id +
+                ", species=" + species.name +
+                ", age=" + age +
+                ", weight=" + weight +
+                ", sellPrice=" + sellPrice +
+                '}';
+    }
+//Grow
     //Eat
     //Breed
     //Sell

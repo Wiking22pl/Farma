@@ -11,4 +11,13 @@ public class AnimalCount {
         this.amount = amount;
         this.adultAmount = adultAmount;
     }
+
+    @Override
+    public String toString() {
+        return "AnimalCount{" +
+                "species=" + species +
+                ", amount=" + amount +
+                ", adultAmount=" + adultAmount +
+                '}';
+    }
 }
