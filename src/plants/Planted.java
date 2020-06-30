@@ -9,10 +9,7 @@ public class Planted {
     public Integer age = 0;
     public Boolean readyToHarvest = false;
 
-    public static Integer id_counter = 0;
-
     public Planted(PlantSpecies species, Double amount) {
-        this.id = id_counter++;
         this.species = species;
         this.amount = amount;
     }

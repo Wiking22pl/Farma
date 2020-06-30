@@ -37,4 +37,19 @@ public class PlantSpecies {
         this.plantingEnd = plantingEnd;
         this.costHarvest = costHarvest;
     }
+
+    @Override
+    public String toString() {
+        return "PlantSpecies{" +
+                "name='" + name + '\'' +
+                ", buyCost=" + buyCost +
+                ", costPlanting=" + costPlanting +
+                ", costPests=" + costPests +
+                ", yield=" + yield +
+                ", growTime=" + growTime +
+                ", plantingStart=" + plantingStart +
+                ", plantingEnd=" + plantingEnd +
+                ", costHarvest=" + costHarvest +
+                "}\n";
+    }
 }

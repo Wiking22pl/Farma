@@ -16,9 +16,6 @@ public class AnimalSpecies {
     //    koszt zakupu
     public final Double buyCost;
 
-    //Ile kosztuje teraz
-
-
     //    tempo przybierania na wadze na tydzień
     public final Double weightGrowth;
 
@@ -47,5 +44,21 @@ public class AnimalSpecies {
         this.breedChance = breedChance;
         this.costOfBoughtFood = costOfBoughtFood;
         this.whatItCanEat = whatItCanEat;
+    }
+
+    @Override
+    public String toString() {
+        return "AnimalSpecies{" +
+                "weight=" + weight +
+                ", name='" + name + '\'' +
+                ", capasity=" + capasity +
+                ", buyCost=" + buyCost +
+                ", weightGrowth=" + weightGrowth +
+                ", adultTime=" + adultTime +
+                ", foodNeeded=" + foodNeeded +
+                ", whatItCanEat=" + whatItCanEat +
+                ", breedChance=" + breedChance +
+                ", costOfBoughtFood=" + costOfBoughtFood +
+                "}\n";
     }
 }
